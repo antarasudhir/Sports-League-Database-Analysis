@@ -688,223 +688,223 @@ def finding(text):
 # ─────────────────────────────────────────────
 # VIZ 1
 # ─────────────────────────────────────────────
-elif viz == "01  Injury Severity vs Win Rate":
-    section_header("01", "Injury Severity vs Win Rate", "Does injury burden predict team success?")
-
-    with st.spinner("Loading data..."):
-        df = aggregate_injury_vs_wins()
-
-    heatmap_data = df.pivot_table(index="team_name", columns="severity", values="total_games_missed", aggfunc="sum").fillna(0)
-    heatmap_data["TOTAL"] = heatmap_data.sum(axis=1)
-    team_order = df[["team_name", "avg_win_pct"]].drop_duplicates().sort_values("avg_win_pct", ascending=False)["team_name"].tolist()
-    heatmap_data = heatmap_data.reindex(team_order)
-    win_pcts = df[["team_name", "avg_win_pct"]].drop_duplicates().set_index("team_name")["avg_win_pct"].to_dict()
-    heatmap_data.index = [f"{t}  ({round(win_pcts[t], 1)}% wins)" for t in heatmap_data.index]
-
-    fig = px.imshow(heatmap_data, color_continuous_scale=[[0, "#0d1117"], [0.5, "#457b9d"], [1, "#e63946"]],
-        text_auto=True, aspect="auto",
-        title="Injury Severity Heatmap — Teams Ranked by Win Rate",
-        labels={"x": "Injury Severity", "y": "Team", "color": "Games Missed"})
-    fig.update_layout(**PLOTLY_LAYOUT, height=600)
-    fig.update_layout(xaxis=dict(side="bottom", color="#9ca3af"), coloraxis_colorbar=dict(tickfont=dict(color="#ffffff"), title=dict(font=dict(color="#ffffff"))))
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("Injury severity alone does not predict wins. The Cowboys (78.1% win rate) suffered 101 severe games missed. The Eagles had the fewest total injuries (148) and still posted 68.8%. <strong>Roster depth absorbs injuries better than avoiding them.</strong>")
+    elif viz == "01  Injury Severity vs Win Rate":
+        section_header("01", "Injury Severity vs Win Rate", "Does injury burden predict team success?")
+    
+        with st.spinner("Loading data..."):
+            df = aggregate_injury_vs_wins()
+    
+        heatmap_data = df.pivot_table(index="team_name", columns="severity", values="total_games_missed", aggfunc="sum").fillna(0)
+        heatmap_data["TOTAL"] = heatmap_data.sum(axis=1)
+        team_order = df[["team_name", "avg_win_pct"]].drop_duplicates().sort_values("avg_win_pct", ascending=False)["team_name"].tolist()
+        heatmap_data = heatmap_data.reindex(team_order)
+        win_pcts = df[["team_name", "avg_win_pct"]].drop_duplicates().set_index("team_name")["avg_win_pct"].to_dict()
+        heatmap_data.index = [f"{t}  ({round(win_pcts[t], 1)}% wins)" for t in heatmap_data.index]
+    
+        fig = px.imshow(heatmap_data, color_continuous_scale=[[0, "#0d1117"], [0.5, "#457b9d"], [1, "#e63946"]],
+            text_auto=True, aspect="auto",
+            title="Injury Severity Heatmap — Teams Ranked by Win Rate",
+            labels={"x": "Injury Severity", "y": "Team", "color": "Games Missed"})
+        fig.update_layout(**PLOTLY_LAYOUT, height=600)
+        fig.update_layout(xaxis=dict(side="bottom", color="#9ca3af"), coloraxis_colorbar=dict(tickfont=dict(color="#ffffff"), title=dict(font=dict(color="#ffffff"))))
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("Injury severity alone does not predict wins. The Cowboys (78.1% win rate) suffered 101 severe games missed. The Eagles had the fewest total injuries (148) and still posted 68.8%. <strong>Roster depth absorbs injuries better than avoiding them.</strong>")
 
 # ─────────────────────────────────────────────
 # VIZ 2
 # ─────────────────────────────────────────────
-elif viz == "02  Win % vs Injury Burden":
-    section_header("02", "Win % vs Injury Burden", "Do heavier injury burdens lead to lower win rates?")
-
-    with st.spinner("Loading data..."):
-        analytical = aggregate_win_pct()
-
-    analytical["label"] = analytical["conference"] + " " + analytical["division"]
-    fig = px.scatter(analytical, x="avg_win_pct", y="avg_games_missed",
-        color="conference", symbol="division", text="label",
-        color_discrete_sequence=["#e63946", "#457b9d"],
-        title="Do Heavier Injury Burdens Lead to Lower Win Rates?",
-        labels={"avg_win_pct": "Avg Win %", "avg_games_missed": "Avg Games Missed Due to Injury"})
-    x = analytical["avg_win_pct"]
-    y = analytical["avg_games_missed"]
-    m, b = np.polyfit(x, y, 1)
-    x_line = np.linspace(x.min(), x.max(), 100)
-    fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines", name="Trend",
-        line=dict(color="#f4a261", dash="dash", width=2)))
-    fig.update_traces(textposition="top center")
-    fig.update_layout(**PLOTLY_LAYOUT, height=550)
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("Weak negative correlation — divisions with more injury games missed tend to win less. AFC EAST has the highest win % and lowest games missed. <strong>But roster depth can override injury burden.</strong>")
+    elif viz == "02  Win % vs Injury Burden":
+        section_header("02", "Win % vs Injury Burden", "Do heavier injury burdens lead to lower win rates?")
+    
+        with st.spinner("Loading data..."):
+            analytical = aggregate_win_pct()
+    
+        analytical["label"] = analytical["conference"] + " " + analytical["division"]
+        fig = px.scatter(analytical, x="avg_win_pct", y="avg_games_missed",
+            color="conference", symbol="division", text="label",
+            color_discrete_sequence=["#e63946", "#457b9d"],
+            title="Do Heavier Injury Burdens Lead to Lower Win Rates?",
+            labels={"avg_win_pct": "Avg Win %", "avg_games_missed": "Avg Games Missed Due to Injury"})
+        x = analytical["avg_win_pct"]
+        y = analytical["avg_games_missed"]
+        m, b = np.polyfit(x, y, 1)
+        x_line = np.linspace(x.min(), x.max(), 100)
+        fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines", name="Trend",
+            line=dict(color="#f4a261", dash="dash", width=2)))
+        fig.update_traces(textposition="top center")
+        fig.update_layout(**PLOTLY_LAYOUT, height=550)
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("Weak negative correlation — divisions with more injury games missed tend to win less. AFC EAST has the highest win % and lowest games missed. <strong>But roster depth can override injury burden.</strong>")
 
 # ─────────────────────────────────────────────
 # VIZ 3
 # ─────────────────────────────────────────────
-elif viz == "03  Match Environment & Home Advantage":
-    section_header("03", "Match Environment & Home Advantage", "Attendance, surface, or attacking play — what creates home advantage?")
-
-    with st.spinner("Loading data..."):
-        matches      = transform(extract("matches"))
-        stadiums     = transform(extract("stadiums"))
-        teams        = transform(extract("teams"))
-        match_events = transform(extract("match_events"))
-        df = aggregate_match_environment(matches, stadiums, teams, match_events)
-
-    conferences = [c for c in df["conference"].dropna().unique()]
-    fig = px.scatter(df, x="avg_utilization", y="home_win_pct",
-        size="avg_home_attacking_events", size_max=22,
-        color="attendance_tier", symbol="surface", facet_col="conference",
-        color_discrete_sequence=PLOTLY_COLORS,
-        hover_name="name_team",
-        hover_data=["season", "division", "surface", "avg_attendance", "avg_score_diff", "total_home_games", "avg_home_attacking_events"],
-        title="Which Match Environments Drive Home Advantage?",
-        labels={"avg_utilization": "Avg Attendance Utilization (%)", "home_win_pct": "Home Win %",
-                "avg_home_attacking_events": "Avg Home Attacking Events", "attendance_tier": "Attendance Tier"})
-    for i, conf in enumerate(conferences, start=1):
-        sub = df[df["conference"] == conf].dropna(subset=["avg_utilization", "home_win_pct"]).copy()
-        if len(sub) >= 2:
-            x = sub["avg_utilization"]; y = sub["home_win_pct"]
-            m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
-            fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines",
-                name=f"{conf} Trend", line=dict(color="#f4a261", dash="dash", width=1.5)), row=1, col=i)
-    fig.update_layout(**PLOTLY_LAYOUT, height=550, legend_title_text="Environment")
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("Attendance utilization does not strongly predict home win %. <strong>Attacking activity is a stronger signal</strong> — teams with more home attacking events tend to have higher win percentages.")
-
-# ─────────────────────────────────────────────
-# VIZ 4
-# ─────────────────────────────────────────────
-elif viz == "04  Stadium Profile & Home Advantage":
-    section_header("04", "Stadium Profile & Home Advantage", "Capacity, utilization, venue age, or surface — which matters most?")
-
-    with st.spinner("Loading data..."):
-        matches  = transform(extract("matches"))
-        stadiums = transform(extract("stadiums"))
-        teams    = transform(extract("teams"))
-        df = aggregate_stadium_profile(matches, stadiums, teams)
-
-    conferences = [c for c in df["conference"].dropna().unique()]
-    fig = px.scatter(df, x="avg_utilization", y="home_win_pct",
-        size="capacity", size_max=26,
-        color="surface", symbol="venue_age_tier", facet_col="conference",
-        color_discrete_sequence=["#e63946", "#457b9d"],
-        hover_name="name",
-        hover_data=["season", "division", "avg_attendance", "avg_score_diff", "total_games", "venue_age", "capacity"],
-        title="Which Stadium Profiles Create the Strongest Home Advantage?",
-        labels={"avg_utilization": "Avg Attendance Utilization (%)", "home_win_pct": "Home Win %"})
-    for i, conf in enumerate(conferences, start=1):
-        sub = df[df["conference"] == conf].dropna(subset=["avg_utilization", "home_win_pct"])
-        if len(sub) >= 2:
-            x = sub["avg_utilization"]; y = sub["home_win_pct"]
-            m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
-            fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines",
-                name=f"{conf} Trend", line=dict(color="#f4a261", dash="dash", width=1.5)), row=1, col=i)
-    fig.update_layout(**PLOTLY_LAYOUT, height=550)
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("Stadium capacity, surface type, and venue age do not consistently predict home win rates. <strong>Team quality and match execution remain the strongest drivers of home advantage.</strong>")
-
-# ─────────────────────────────────────────────
-# VIZ 5
-# ─────────────────────────────────────────────
-elif viz == "05  Transfer ROI by Position":
-    section_header("05", "Transfer ROI by Position", "Are expensive players worth it?")
-
-    with st.spinner("Loading data..."):
-        df = aggregate_transfer_roi()
-
-    def make_pivot(df, value):
-        return df.pivot_table(index="transfer_type", columns="position", values=value, aggfunc="mean")
-
-    fee_pivot    = make_pivot(df, "avg_transfer_fee").fillna(0) / 1_000_000
-    injury_pivot = make_pivot(df, "injuries_per_transfer").fillna(0)
-    fee_pivot    = fee_pivot.loc[fee_pivot.mean(axis=1).sort_values(ascending=False).index]
-    injury_pivot = injury_pivot.loc[fee_pivot.index]
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
-    fig.patch.set_facecolor("#0d1117")
-    for ax in [ax1, ax2]:
-        ax.set_facecolor("#0d1117")
-        ax.tick_params(colors="#9ca3af")
-        for spine in ax.spines.values():
-            spine.set_edgecolor("#30363d")
-
-    im1 = ax1.imshow(fee_pivot.values, cmap="Blues", aspect="auto")
-    ax1.set_xticks(range(len(fee_pivot.columns))); ax1.set_yticks(range(len(fee_pivot.index)))
-    ax1.set_xticklabels(fee_pivot.columns, color="#9ca3af"); ax1.set_yticklabels(fee_pivot.index, color="#9ca3af")
-    ax1.set_title("Avg Transfer Fee ($M) by Position & Transfer Type", color="#ffffff", fontsize=12, pad=10)
-    cb1 = plt.colorbar(im1, ax=ax1, label="Avg Fee ($M)")
-    cb1.ax.yaxis.set_tick_params(color="#9ca3af"); cb1.set_label("Avg Fee ($M)", color="#9ca3af")
-
-    im2 = ax2.imshow(injury_pivot.values, cmap="Reds", aspect="auto")
-    ax2.set_xticks(range(len(injury_pivot.columns))); ax2.set_yticks(range(len(injury_pivot.index)))
-    ax2.set_xticklabels(injury_pivot.columns, color="#9ca3af"); ax2.set_yticklabels(injury_pivot.index, color="#9ca3af")
-    ax2.set_title("Injury Rate by Position & Transfer Type", color="#ffffff", fontsize=12, pad=10)
-    cb2 = plt.colorbar(im2, ax=ax2, label="Injuries per Transfer")
-    cb2.ax.yaxis.set_tick_params(color="#9ca3af"); cb2.set_label("Injuries per Transfer", color="#9ca3af")
-
-    position_labels = {"CB": "Cornerback", "DL": "Defensive Lineman", "K": "Kicker",
-        "LB": "Linebacker", "OL": "Offensive Lineman", "P": "Punter",
-        "QB": "Quarterback", "RB": "Running Back", "S": "Safety", "TE": "Tight End", "WR": "Wide Receiver"}
-    legend_elements = [Line2D([0], [0], color="w", label=f"{k}: {v}") for k, v in position_labels.items()]
-    fig.legend(handles=legend_elements, loc="center left", bbox_to_anchor=(0.98, 0.95),
-        title="Position Key", title_fontsize=9, prop={"size": 8},
-        frameon=True, handlelength=0, handletextpad=0, borderpad=0.5, ncol=1,
-        facecolor="#161b22", labelcolor="#ffffff", title_fontcolor="#e63946")
-    fig.suptitle("Transfer ROI by Position", fontsize=18, color="#ffffff", y=1.03,
-        fontfamily="sans-serif", fontweight="bold")
-    fig.text(0.5, 0.93, "Are Expensive Players Worth It?", ha="center", fontsize=13, color="#9ca3af")
-    plt.tight_layout(rect=[0, 0, 0.92, 0.90])
-    st.pyplot(fig)
-
-    finding("The most expensive acquisitions carry the highest injury risk. WR & TE free transfers show high injury rates. <strong>True ROI = cost + player availability. High fee ≠ low injury risk.</strong>")
-
-# ─────────────────────────────────────────────
-# VIZ 6
-# ─────────────────────────────────────────────
-elif viz == "06  Payroll vs Win %":
-    section_header("06", "Payroll vs Win %", "Does paying for more expensive talent result in more wins?")
-
-    with st.spinner("Loading data..."):
-        df = aggregate_payroll()
-
-    fig = px.scatter(df, x="win_pct", y="total_payroll", hover_name="name",
-        color_discrete_sequence=["#e63946"],
-        title="Total Team Payroll vs. Win % (2023 Season)",
-        labels={"win_pct": "Win %", "total_payroll": "Total Payroll ($)"})
-    x = df["win_pct"]; y = df["total_payroll"]
-    m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
-    fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines", name="Trend",
-        line=dict(color="#f4a261", dash="dash", width=2)))
-    fig.update_traces(marker=dict(size=10), selector=dict(mode="markers"))
-    fig.update_layout(**PLOTLY_LAYOUT, height=500)
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("Higher payroll does not consistently lead to higher win rates. Payrolls range $200M–$500M but the trendline is shallow with many outliers. <strong>How you build a roster matters more than how much you spend.</strong>")
-
-# ─────────────────────────────────────────────
-# VIZ 7
-# ─────────────────────────────────────────────
-elif viz == "07  Roster Age vs Points":
-    section_header("07", "Roster Age vs Points", "Young players or older ones — which approach wins?")
-
-    with st.spinner("Loading data..."):
-        df = aggregate_roster_age_impact()
-
-    fig = px.scatter(df, x="avg_roster_age", y="points",
-        size="total_games_missed", color="season",
-        color_discrete_sequence=["#e63946", "#457b9d", "#f4a261", "#2a9d8f"],
-        hover_name="team_name",
-        hover_data={"season": True, "wins": True, "season_rank": True,
-                    "roster_size": True, "total_games_missed": True, "avg_roster_age": ":.1f"},
-        title="Does Roster Age Decide Who Wins? (2020–2023)",
-        labels={"avg_roster_age": "Average Roster Age (years)", "points": "Points Earned",
-                "total_games_missed": "Games Missed (Injuries)", "season": "Season"},
-        trendline="ols", trendline_scope="overall", trendline_color_override="#f4a261")
-    fig.update_layout(**PLOTLY_LAYOUT, height=550, template="plotly_dark")
-    fig.update_layout(paper_bgcolor="#0d1117", plot_bgcolor="#0d1117")
-    st.plotly_chart(fig, use_container_width=True)
-
-    finding("The trendline is nearly flat. Roster age does not predict standings success. Top and bottom performing teams land at similar average ages. <strong>Strategy and execution matter more than demographics.</strong>")
+    elif viz == "03  Match Environment & Home Advantage":
+        section_header("03", "Match Environment & Home Advantage", "Attendance, surface, or attacking play — what creates home advantage?")
+    
+        with st.spinner("Loading data..."):
+            matches      = transform(extract("matches"))
+            stadiums     = transform(extract("stadiums"))
+            teams        = transform(extract("teams"))
+            match_events = transform(extract("match_events"))
+            df = aggregate_match_environment(matches, stadiums, teams, match_events)
+    
+        conferences = [c for c in df["conference"].dropna().unique()]
+        fig = px.scatter(df, x="avg_utilization", y="home_win_pct",
+            size="avg_home_attacking_events", size_max=22,
+            color="attendance_tier", symbol="surface", facet_col="conference",
+            color_discrete_sequence=PLOTLY_COLORS,
+            hover_name="name_team",
+            hover_data=["season", "division", "surface", "avg_attendance", "avg_score_diff", "total_home_games", "avg_home_attacking_events"],
+            title="Which Match Environments Drive Home Advantage?",
+            labels={"avg_utilization": "Avg Attendance Utilization (%)", "home_win_pct": "Home Win %",
+                    "avg_home_attacking_events": "Avg Home Attacking Events", "attendance_tier": "Attendance Tier"})
+        for i, conf in enumerate(conferences, start=1):
+            sub = df[df["conference"] == conf].dropna(subset=["avg_utilization", "home_win_pct"]).copy()
+            if len(sub) >= 2:
+                x = sub["avg_utilization"]; y = sub["home_win_pct"]
+                m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
+                fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines",
+                    name=f"{conf} Trend", line=dict(color="#f4a261", dash="dash", width=1.5)), row=1, col=i)
+        fig.update_layout(**PLOTLY_LAYOUT, height=550, legend_title_text="Environment")
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("Attendance utilization does not strongly predict home win %. <strong>Attacking activity is a stronger signal</strong> — teams with more home attacking events tend to have higher win percentages.")
+    
+    # ─────────────────────────────────────────────
+    # VIZ 4
+    # ─────────────────────────────────────────────
+    elif viz == "04  Stadium Profile & Home Advantage":
+        section_header("04", "Stadium Profile & Home Advantage", "Capacity, utilization, venue age, or surface — which matters most?")
+    
+        with st.spinner("Loading data..."):
+            matches  = transform(extract("matches"))
+            stadiums = transform(extract("stadiums"))
+            teams    = transform(extract("teams"))
+            df = aggregate_stadium_profile(matches, stadiums, teams)
+    
+        conferences = [c for c in df["conference"].dropna().unique()]
+        fig = px.scatter(df, x="avg_utilization", y="home_win_pct",
+            size="capacity", size_max=26,
+            color="surface", symbol="venue_age_tier", facet_col="conference",
+            color_discrete_sequence=["#e63946", "#457b9d"],
+            hover_name="name",
+            hover_data=["season", "division", "avg_attendance", "avg_score_diff", "total_games", "venue_age", "capacity"],
+            title="Which Stadium Profiles Create the Strongest Home Advantage?",
+            labels={"avg_utilization": "Avg Attendance Utilization (%)", "home_win_pct": "Home Win %"})
+        for i, conf in enumerate(conferences, start=1):
+            sub = df[df["conference"] == conf].dropna(subset=["avg_utilization", "home_win_pct"])
+            if len(sub) >= 2:
+                x = sub["avg_utilization"]; y = sub["home_win_pct"]
+                m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
+                fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines",
+                    name=f"{conf} Trend", line=dict(color="#f4a261", dash="dash", width=1.5)), row=1, col=i)
+        fig.update_layout(**PLOTLY_LAYOUT, height=550)
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("Stadium capacity, surface type, and venue age do not consistently predict home win rates. <strong>Team quality and match execution remain the strongest drivers of home advantage.</strong>")
+    
+    # ─────────────────────────────────────────────
+    # VIZ 5
+    # ─────────────────────────────────────────────
+    elif viz == "05  Transfer ROI by Position":
+        section_header("05", "Transfer ROI by Position", "Are expensive players worth it?")
+    
+        with st.spinner("Loading data..."):
+            df = aggregate_transfer_roi()
+    
+        def make_pivot(df, value):
+            return df.pivot_table(index="transfer_type", columns="position", values=value, aggfunc="mean")
+    
+        fee_pivot    = make_pivot(df, "avg_transfer_fee").fillna(0) / 1_000_000
+        injury_pivot = make_pivot(df, "injuries_per_transfer").fillna(0)
+        fee_pivot    = fee_pivot.loc[fee_pivot.mean(axis=1).sort_values(ascending=False).index]
+        injury_pivot = injury_pivot.loc[fee_pivot.index]
+    
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+        fig.patch.set_facecolor("#0d1117")
+        for ax in [ax1, ax2]:
+            ax.set_facecolor("#0d1117")
+            ax.tick_params(colors="#9ca3af")
+            for spine in ax.spines.values():
+                spine.set_edgecolor("#30363d")
+    
+        im1 = ax1.imshow(fee_pivot.values, cmap="Blues", aspect="auto")
+        ax1.set_xticks(range(len(fee_pivot.columns))); ax1.set_yticks(range(len(fee_pivot.index)))
+        ax1.set_xticklabels(fee_pivot.columns, color="#9ca3af"); ax1.set_yticklabels(fee_pivot.index, color="#9ca3af")
+        ax1.set_title("Avg Transfer Fee ($M) by Position & Transfer Type", color="#ffffff", fontsize=12, pad=10)
+        cb1 = plt.colorbar(im1, ax=ax1, label="Avg Fee ($M)")
+        cb1.ax.yaxis.set_tick_params(color="#9ca3af"); cb1.set_label("Avg Fee ($M)", color="#9ca3af")
+    
+        im2 = ax2.imshow(injury_pivot.values, cmap="Reds", aspect="auto")
+        ax2.set_xticks(range(len(injury_pivot.columns))); ax2.set_yticks(range(len(injury_pivot.index)))
+        ax2.set_xticklabels(injury_pivot.columns, color="#9ca3af"); ax2.set_yticklabels(injury_pivot.index, color="#9ca3af")
+        ax2.set_title("Injury Rate by Position & Transfer Type", color="#ffffff", fontsize=12, pad=10)
+        cb2 = plt.colorbar(im2, ax=ax2, label="Injuries per Transfer")
+        cb2.ax.yaxis.set_tick_params(color="#9ca3af"); cb2.set_label("Injuries per Transfer", color="#9ca3af")
+    
+        position_labels = {"CB": "Cornerback", "DL": "Defensive Lineman", "K": "Kicker",
+            "LB": "Linebacker", "OL": "Offensive Lineman", "P": "Punter",
+            "QB": "Quarterback", "RB": "Running Back", "S": "Safety", "TE": "Tight End", "WR": "Wide Receiver"}
+        legend_elements = [Line2D([0], [0], color="w", label=f"{k}: {v}") for k, v in position_labels.items()]
+        fig.legend(handles=legend_elements, loc="center left", bbox_to_anchor=(0.98, 0.95),
+            title="Position Key", title_fontsize=9, prop={"size": 8},
+            frameon=True, handlelength=0, handletextpad=0, borderpad=0.5, ncol=1,
+            facecolor="#161b22", labelcolor="#ffffff", title_fontcolor="#e63946")
+        fig.suptitle("Transfer ROI by Position", fontsize=18, color="#ffffff", y=1.03,
+            fontfamily="sans-serif", fontweight="bold")
+        fig.text(0.5, 0.93, "Are Expensive Players Worth It?", ha="center", fontsize=13, color="#9ca3af")
+        plt.tight_layout(rect=[0, 0, 0.92, 0.90])
+        st.pyplot(fig)
+    
+        finding("The most expensive acquisitions carry the highest injury risk. WR & TE free transfers show high injury rates. <strong>True ROI = cost + player availability. High fee ≠ low injury risk.</strong>")
+    
+    # ─────────────────────────────────────────────
+    # VIZ 6
+    # ─────────────────────────────────────────────
+    elif viz == "06  Payroll vs Win %":
+        section_header("06", "Payroll vs Win %", "Does paying for more expensive talent result in more wins?")
+    
+        with st.spinner("Loading data..."):
+            df = aggregate_payroll()
+    
+        fig = px.scatter(df, x="win_pct", y="total_payroll", hover_name="name",
+            color_discrete_sequence=["#e63946"],
+            title="Total Team Payroll vs. Win % (2023 Season)",
+            labels={"win_pct": "Win %", "total_payroll": "Total Payroll ($)"})
+        x = df["win_pct"]; y = df["total_payroll"]
+        m, b = np.polyfit(x, y, 1); x_line = np.linspace(x.min(), x.max(), 100)
+        fig.add_trace(go.Scatter(x=x_line, y=m * x_line + b, mode="lines", name="Trend",
+            line=dict(color="#f4a261", dash="dash", width=2)))
+        fig.update_traces(marker=dict(size=10), selector=dict(mode="markers"))
+        fig.update_layout(**PLOTLY_LAYOUT, height=500)
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("Higher payroll does not consistently lead to higher win rates. Payrolls range $200M–$500M but the trendline is shallow with many outliers. <strong>How you build a roster matters more than how much you spend.</strong>")
+    
+    # ─────────────────────────────────────────────
+    # VIZ 7
+    # ─────────────────────────────────────────────
+    elif viz == "07  Roster Age vs Points":
+        section_header("07", "Roster Age vs Points", "Young players or older ones — which approach wins?")
+    
+        with st.spinner("Loading data..."):
+            df = aggregate_roster_age_impact()
+    
+        fig = px.scatter(df, x="avg_roster_age", y="points",
+            size="total_games_missed", color="season",
+            color_discrete_sequence=["#e63946", "#457b9d", "#f4a261", "#2a9d8f"],
+            hover_name="team_name",
+            hover_data={"season": True, "wins": True, "season_rank": True,
+                        "roster_size": True, "total_games_missed": True, "avg_roster_age": ":.1f"},
+            title="Does Roster Age Decide Who Wins? (2020–2023)",
+            labels={"avg_roster_age": "Average Roster Age (years)", "points": "Points Earned",
+                    "total_games_missed": "Games Missed (Injuries)", "season": "Season"},
+            trendline="ols", trendline_scope="overall", trendline_color_override="#f4a261")
+        fig.update_layout(**PLOTLY_LAYOUT, height=550, template="plotly_dark")
+        fig.update_layout(paper_bgcolor="#0d1117", plot_bgcolor="#0d1117")
+        st.plotly_chart(fig, use_container_width=True)
+    
+        finding("The trendline is nearly flat. Roster age does not predict standings success. Top and bottom performing teams land at similar average ages. <strong>Strategy and execution matter more than demographics.</strong>")

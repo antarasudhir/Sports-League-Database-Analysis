@@ -236,7 +236,7 @@ Open `AD599_Notebook.ipynb` in Google Colab and run all cells top to bottom. The
 
 ## Live App
 
-🚀 **[View the live Streamlit app](https://dbsportleagueanalysis-lohae79pxpz7tzapp2aky4r.streamlit.app/)**
+🚀 **[View the live Streamlit app]([https://dbsportleagueanalysis-lohae79pxpz7tzapp2aky4r.streamlit.app/](https://sports-league-database-analysis-wgwg7pd59juocaz8snnlxm.streamlit.app/))**
 
 📎 **[View Presentation Slides](Slide_Deck.pdf)**
 

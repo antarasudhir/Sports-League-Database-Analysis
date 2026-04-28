@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
-CONN_STR = "sqlitecloud://cgllukzpvk.g1.sqlite.cloud:8860/team7_sportsleague.db?apikey=n2FaqEbp5bd9b9M1k5a9raf0kzV1ZALaepJqjMynwSA"
+CONN_STR = f"sqlitecloud://cgllukzpvk.g1.sqlite.cloud:8860/team7_sportsleague.db?apikey={st.secrets['SQLITECLOUD_API_KEY']}"
 
 st.set_page_config(
     page_title="Sports League DB Analysis — Team 7",

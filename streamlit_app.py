@@ -279,7 +279,7 @@ viz = st.sidebar.radio("", [
 
 st.sidebar.divider()
 st.sidebar.markdown("**Team 7**")
-st.sidebar.markdown("Julie · Meera · Sarah · Antara · Simon · Hayley")
+st.sidebar.markdown("Julie · Meera · Sarah · Antara · Simon · Haley")
 
 # ─────────────────────────────────────────────
 # OVERVIEW PAGE

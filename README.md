@@ -239,7 +239,7 @@ Open `AD599_Notebook.ipynb` in Google Colab and run all cells top to bottom. The
 🚀 **[View the live Streamlit app](https://dbsportleagueanalysis-lohae79pxpz7tzapp2aky4r.streamlit.app/)**
 
 📎 **[View Presentation Slides](Slide_Deck.pdf)**
----
 
+---
 *MET AD599 Final Project — Boston University Metropolitan College*  
 *Database: `team7_sportsleague.db` hosted on [sqlite.ai](https://sqlite.ai)*

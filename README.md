@@ -10,8 +10,8 @@ An end-to-end data analysis project built on a fictional professional sports lea
 ---
 
 ## 👥 Team 7
+**Antara · Meera · Julie · Sarah · Haley · Simon**
 
-Antara · Meera · Julie · Sarah · Haley · Simon
 ---
 
 ## 📋 Table of Contents

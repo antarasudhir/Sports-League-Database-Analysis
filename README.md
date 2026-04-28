@@ -238,8 +238,7 @@ Open `AD599_Notebook.ipynb` in Google Colab and run all cells top to bottom. The
 
 🚀 **[View the live Streamlit app](https://dbsportleagueanalysis-lohae79pxpz7tzapp2aky4r.streamlit.app/)**
 
-📎 **[View presentation slides](YOUR_CANVA_LINK_HERE)**
-
+📎 **[View Presentation Slides](https://canva.link/7ihcevcovs5a4ve)**
 ---
 
 *MET AD599 Final Project — Boston University Metropolitan College*  

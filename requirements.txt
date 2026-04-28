@@ -1,0 +1,7 @@
+streamlit
+sqlitecloud
+pandas
+numpy
+plotly
+matplotlib
+statsmodels

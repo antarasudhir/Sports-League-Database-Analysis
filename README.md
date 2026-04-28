@@ -41,6 +41,8 @@ Haley · Simon · Sarah · Antara · Meera · Julie
 
 ## Database Schema
 
+![Entity Relationship Diagram](assets/AD599 Team 7 ERD.png)
+
 The `team7_sportsleague.db` database contains 8 tables covering seasons 2020–2023:
 
 | Table | Description |

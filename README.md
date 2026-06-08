@@ -1,7 +1,7 @@
 # 🏆 Sports League Database Analysis
 ### MET AD599 — Final Project | Python & SQL
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://dbsportleagueanalysis-lohae79pxpz7tzapp2aky4r.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sports-league-database-analysis-wgwg7pd59juocaz8snnlxm.streamlit.app/)
 
 An end-to-end data analysis project built on a fictional professional sports league database. We connected to a live cloud-hosted SQLite database, engineered a shared ETL pipeline in Python, and produced 7 interactive visualizations exploring the factors that drive team success — across injuries, payroll, stadium environments, player transfers, and roster composition.
 

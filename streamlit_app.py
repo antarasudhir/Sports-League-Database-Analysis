@@ -650,7 +650,13 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Avg Transfer Fee ($M)",
             labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
         )
-        fig1.update_layout(height=500, width=700, xaxis=dict(tickangle=45))
+        fig1.update_layout(
+            height=500, 
+            width=700, 
+            xaxis=dict(tickangle=45),
+            paper_bgcolor="#1A1F2E",
+            plot_bgcolor="#1A1F2E",
+            font=dict(color="#E8ECF0"))
         fig1.update_traces(textfont=dict(size=9))
         st.plotly_chart(fig1, use_container_width=True)
 

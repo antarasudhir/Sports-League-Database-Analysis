@@ -23,6 +23,50 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #1A1F2E 0%, #0E1117 100%);
+    border-right: 1px solid #00D4FF22;
+}
+
+/* Metric cards */
+[data-testid="metric-container"] {
+    background: #1A1F2E;
+    border: 1px solid #00D4FF33;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+/* Divider */
+hr {
+    border-color: #00D4FF22;
+}
+
+/* Radio buttons in sidebar */
+[data-testid="stRadio"] label {
+    color: #E8ECF0 !important;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #00D4FF !important;
+}
+
+/* Plotly chart background */
+.js-plotly-plot {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Spinner */
+[data-testid="stSpinner"] {
+    color: #00D4FF;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ─────────────────────────────────────────────
 # DB LOADER
 # ─────────────────────────────────────────────
@@ -369,7 +413,13 @@ elif viz == "Viz 1 — Injury Severity vs Win Rate":
         title="Injury Severity Heatmap — Teams Ranked by Win Rate",
         labels={"x": "Injury Severity", "y": "Team", "color": "Games Missed"}
     )
-    fig.update_layout(xaxis=dict(side="bottom"), height=600)
+    fig.update_layout(
+        xaxis=dict(side="bottom"), 
+        height=600,
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0")
+    )
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
@@ -409,7 +459,10 @@ elif viz == "Viz 2 — Win % vs Injury Burden":
         line=dict(color="gray", dash="dash", width=1.5)
     ))
     fig.update_traces(textposition="top center")
-    fig.update_layout(height=550)
+    fig.update_layout(height=550,
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
@@ -473,7 +526,12 @@ elif viz == "Viz 3 — Match Environment vs Home Advantage":
             showarrow=True, arrowhead=1, ax=18, ay=-18,
             font=dict(size=10), row=1, col=conf_index)
 
-    fig.update_layout(legend_title_text="Environment", height=550)
+    fig.update_layout(
+        legend_title_text="Environment", 
+        height=550,
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
@@ -535,7 +593,11 @@ elif viz == "Viz 4 — Stadium Profile vs Home Advantage":
             showarrow=True, arrowhead=1, ax=18, ay=-18,
             font=dict(size=10), row=1, col=conf_index)
 
-    fig.update_layout(height=550)
+    fig.update_layout(
+        height=550,
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
@@ -601,7 +663,13 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Injury Rate per Transfer",
             labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}
         )
-        fig2.update_layout(height=500, width=700, xaxis=dict(tickangle=45))
+        fig2.update_layout(
+            height=500, 
+            width=700, 
+            xaxis=dict(tickangle=45),
+            paper_bgcolor="#1A1F2E",
+            plot_bgcolor="#1A1F2E",
+            font=dict(color="#E8ECF0"))
         fig2.update_traces(textfont=dict(size=9))
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -637,7 +705,11 @@ elif viz == "Viz 6 — Payroll vs Win %":
         mode="lines", name="Trend",
         line=dict(color="gray", dash="dash", width=1.5)
     ))
-    fig.update_layout(height=500)
+    fig.update_layout(
+        height=500,
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
@@ -668,7 +740,12 @@ elif viz == "Viz 7 — Roster Age vs Points":
                 "total_games_missed": "Games Missed (Injuries)", "season": "Season"},
         trendline="ols", trendline_scope="overall", trendline_color_override="gray"
     )
-    fig.update_layout(height=550, template="plotly_white")
+    fig.update_layout(
+        height=550, 
+        template="plotly_white",
+        paper_bgcolor="#1A1F2E",
+        plot_bgcolor="#1A1F2E",
+        font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""

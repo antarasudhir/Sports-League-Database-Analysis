@@ -630,31 +630,18 @@ elif viz == "Viz 5 — Transfer ROI by Position":
         "QB": "Quarterback", "RB": "Running Back", "S": "Safety",
         "TE": "Tight End", "WR": "Wide Receiver"
     }
-
     df["position_label"] = df["position"].map(position_labels).fillna(df["position"])
     df["avg_transfer_fee_M"] = (df["avg_transfer_fee"] / 1_000_000).round(2)
 
     fee_pivot = df.pivot_table(
-        index="transfer_type", columns="position",
+        index="transfer_type", columns="position_label",
         values="avg_transfer_fee_M", aggfunc="mean"
     ).fillna(0)
 
     injury_pivot = df.pivot_table(
-        index="transfer_type", columns="position",
+        index="transfer_type", columns="position_label",
         values="injuries_per_transfer", aggfunc="mean"
     ).fillna(0)
-
-    hover_fee = df.pivot_table(
-        index="transfer_type", columns="position",
-        values="avg_transfer_fee_M", aggfunc="mean"
-    ).fillna(0)
-    hover_fee.columns = [position_labels.get(c, c) for c in hover_fee.columns]
-
-    hover_injury = df.pivot_table(
-        index="transfer_type", columns="position",
-        values="injuries_per_transfer", aggfunc="mean"
-    ).fillna(0)
-    hover_injury.columns = [position_labels.get(c, c) for c in hover_injury.columns]
 
     col1, col2 = st.columns(2)
 
@@ -667,19 +654,16 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Avg Transfer Fee ($M)",
             labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
         )
-        fig1.update_traces(
-            customdata=hover_fee.values,
-            hovertemplate="<b>%{y}</b><br>Position: %{customdata}<br>Avg Fee: $%{z:.2f}M<extra></extra>"
-        )
         fig1.update_layout(
-            height=500, width=650,
-            title_x=0.5,
-            xaxis=dict(tickangle=0),
+            height=450, 
+            width=6500, 
+            title_x=0.4,
+            xaxis=dict(tickangle=45),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",
-            font=dict(color="#E8ECF0")
-        )
-        st.plotly_chart(fig1, use_container_width=False)
+            font=dict(color="#E8ECF0"))
+        fig1.update_traces(textfont=dict(size=9))
+        st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
         fig2 = px.imshow(
@@ -690,19 +674,16 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Injury Rate per Transfer",
             labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}
         )
-        fig2.update_traces(
-            customdata=hover_injury.values,
-            hovertemplate="<b>%{y}</b><br>Position: %{customdata}<br>Injuries per Transfer: %{z:.2f}<extra></extra>"
-        )
         fig2.update_layout(
-            height=500, width=650,
-            title_x=0.5,
-            xaxis=dict(tickangle=0),
+            height=450, 
+            width=650, 
+            title_x=0.4,
+            xaxis=dict(tickangle=45),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",
-            font=dict(color="#E8ECF0")
-        )
-        st.plotly_chart(fig2, use_container_width=False)
+            font=dict(color="#E8ECF0"))
+        fig2.update_traces(textfont=dict(size=9))
+        st.plotly_chart(fig2, use_container_width=True)
 
     st.markdown("""
     **Key finding:** The most expensive acquisitions carry the highest injury risk.

@@ -651,8 +651,8 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
         )
         fig1.update_layout(
-            height=500, 
-            width=700, 
+            height=450, 
+            width=6500, 
             xaxis=dict(tickangle=45),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",
@@ -670,8 +670,8 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}
         )
         fig2.update_layout(
-            height=500, 
-            width=700, 
+            height=450, 
+            width=650, 
             xaxis=dict(tickangle=45),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",

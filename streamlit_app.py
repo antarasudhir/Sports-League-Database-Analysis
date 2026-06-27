@@ -643,6 +643,11 @@ elif viz == "Viz 5 — Transfer ROI by Position":
         values="injuries_per_transfer", aggfunc="mean"
     ).fillna(0)
 
+    label_to_abbr = {v: k for k, v in position_labels.items()}
+    fee_pivot.columns.name = "Position"
+    injury_pivot.columns.name = "Position"
+    fee_pivot = fee_pivot.rename(columns=label_to_abbr)
+    injury_pivot = injury_pivot.rename(columns=label_to_abbr)
     
     col1, col2 = st.columns(2)
 

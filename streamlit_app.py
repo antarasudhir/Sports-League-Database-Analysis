@@ -588,7 +588,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Avg Transfer Fee ($M)",
             labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
         )
-        fig1.update_layout(height=500, xaxis=dict(tickangle=0))
+        fig1.update_layout(height=500, xaxis=dict(tickangle=90))
         fig1.update_traces(textfont=dict(size=9))
         st.plotly_chart(fig1, use_container_width=True)
 
@@ -601,7 +601,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             title="Injury Rate per Transfer",
             labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}
         )
-        fig2.update_layout(height=500, xaxis=dict(tickangle=0))
+        fig2.update_layout(height=500, xaxis=dict(tickangle=90))
         fig2.update_traces(textfont=dict(size=9))
         st.plotly_chart(fig2, use_container_width=True)
 

@@ -204,7 +204,6 @@ def aggregate_transfer_roi():
     LEFT JOIN injuries i ON p.player_id = i.player_id
     WHERE t.fee >= 0
       AND t.fee IS NOT NULL
-      AND t.transfer_type IN ('Free Transfer', 'Permanent', 'Loan', 'Academy Promotion')
     GROUP BY p.position, t.transfer_type
     HAVING AVG(t.fee) IS NOT NULL
     ORDER BY avg_transfer_fee DESC
@@ -559,48 +558,50 @@ elif viz == "Viz 5 — Transfer ROI by Position":
     with st.spinner("Loading data..."):
         df = aggregate_transfer_roi()
 
-    def make_pivot(df, value):
-        return df.pivot_table(
-            index="transfer_type", columns="position",
-            values=value, aggfunc="mean"
-        )
-
-    fee_pivot    = make_pivot(df, "avg_transfer_fee").fillna(0) / 1_000_000
-    injury_pivot = make_pivot(df, "injuries_per_transfer").fillna(0)
-    fee_pivot    = fee_pivot.loc[fee_pivot.mean(axis=1).sort_values(ascending=False).index]
-    injury_pivot = injury_pivot.loc[fee_pivot.index]
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
-    im1 = ax1.imshow(fee_pivot.values, cmap="Blues", aspect="auto")
-    ax1.set_xticks(range(len(fee_pivot.columns)))
-    ax1.set_yticks(range(len(fee_pivot.index)))
-    ax1.set_xticklabels(fee_pivot.columns)
-    ax1.set_yticklabels(fee_pivot.index)
-    ax1.set_title("Avg Transfer Fee ($M) by Position & Transfer Type")
-    plt.colorbar(im1, ax=ax1, label="Avg Fee ($M)")
-
-    im2 = ax2.imshow(injury_pivot.values, cmap="Reds", aspect="auto")
-    ax2.set_xticks(range(len(injury_pivot.columns)))
-    ax2.set_yticks(range(len(injury_pivot.index)))
-    ax2.set_xticklabels(injury_pivot.columns)
-    ax2.set_yticklabels(injury_pivot.index)
-    ax2.set_title("Injury Rate by Position & Transfer Type")
-    plt.colorbar(im2, ax=ax2, label="Injuries per Transfer")
-
     position_labels = {
         "CB": "Cornerback", "DL": "Defensive Lineman", "K": "Kicker",
         "LB": "Linebacker", "OL": "Offensive Lineman", "P": "Punter",
         "QB": "Quarterback", "RB": "Running Back", "S": "Safety",
         "TE": "Tight End", "WR": "Wide Receiver"
     }
-    legend_elements = [Line2D([0], [0], color="w", label=f"{k}: {v}") for k, v in position_labels.items()]
-    fig.legend(handles=legend_elements, loc="center left", bbox_to_anchor=(0.98, 0.95),
-               title="Position Key", title_fontsize=10, prop={"size": 8},
-               frameon=True, handlelength=0, handletextpad=0, borderpad=0.5, ncol=1)
-    fig.suptitle("Transfer ROI by Position", fontsize=18, y=1.03)
-    fig.text(0.5, 0.93, "Are Expensive Players Worth It?", ha="center", fontsize=13, color="gray")
-    plt.tight_layout(rect=[0, 0, 0.92, 0.90])
-    st.pyplot(fig)
+    df["position_label"] = df["position"].map(position_labels).fillna(df["position"])
+    df["avg_transfer_fee_M"] = (df["avg_transfer_fee"] / 1_000_000).round(2)
+
+    fee_pivot = df.pivot_table(
+        index="transfer_type", columns="position_label",
+        values="avg_transfer_fee_M", aggfunc="mean"
+    ).fillna(0)
+
+    injury_pivot = df.pivot_table(
+        index="transfer_type", columns="position_label",
+        values="injuries_per_transfer", aggfunc="mean"
+    ).fillna(0)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig1 = px.imshow(
+            fee_pivot,
+            color_continuous_scale="Blues",
+            text_auto=".2f",
+            aspect="auto",
+            title="Avg Transfer Fee ($M)",
+            labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
+        )
+        fig1.update_layout(height=400)
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with col2:
+        fig2 = px.imshow(
+            injury_pivot,
+            color_continuous_scale="Reds",
+            text_auto=".2f",
+            aspect="auto",
+            title="Injury Rate per Transfer",
+            labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}
+        )
+        fig2.update_layout(height=400)
+        st.plotly_chart(fig2, use_container_width=True)
 
     st.markdown("""
     **Key finding:** The most expensive acquisitions carry the highest injury risk.

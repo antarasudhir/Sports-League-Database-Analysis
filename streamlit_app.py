@@ -583,7 +583,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
         fig1 = px.imshow(
             fee_pivot,
             color_continuous_scale="Blues",
-            text_auto=".2f",
+            text_auto=False,
             aspect="auto",
             title="Avg Transfer Fee ($M)",
             labels={"x": "Position", "y": "Transfer Type", "color": "Avg Fee ($M)"}
@@ -596,7 +596,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
         fig2 = px.imshow(
             injury_pivot,
             color_continuous_scale="Reds",
-            text_auto=".2f",
+            text_auto=False,
             aspect="auto",
             title="Injury Rate per Transfer",
             labels={"x": "Position", "y": "Transfer Type", "color": "Injuries per Transfer"}

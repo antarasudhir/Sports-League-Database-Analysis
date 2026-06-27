@@ -416,7 +416,7 @@ elif viz == "Viz 1 — Injury Severity vs Win Rate":
     fig.update_layout(
         xaxis=dict(side="bottom"), 
         height=600,
-        title_x=0.35,
+        title_x=0.3,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0")
@@ -463,7 +463,7 @@ elif viz == "Viz 2 — Win % vs Injury Burden":
     fig.update_layout(height=550,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
-        title_x=0.35,
+        title_x=0.3,
         font=dict(color="#E8ECF0"))
     st.plotly_chart(fig, use_container_width=True)
 
@@ -531,7 +531,7 @@ elif viz == "Viz 3 — Match Environment vs Home Advantage":
     fig.update_layout(
         legend_title_text="Environment", 
         height=550,
-        title_x=0.1,
+        title_x=0.2,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0"))
@@ -598,7 +598,7 @@ elif viz == "Viz 4 — Stadium Profile vs Home Advantage":
 
     fig.update_layout(
         height=550,
-        title_x=0.35,
+        title_x=0.3,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0"))
@@ -719,7 +719,7 @@ elif viz == "Viz 6 — Payroll vs Win %":
     ))
     fig.update_layout(
         height=500,
-        title_x=0.35,
+        title_x=0.3,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0"))
@@ -755,7 +755,7 @@ elif viz == "Viz 7 — Roster Age vs Points":
     )
     fig.update_layout(
         height=550, 
-        title_x=0.35,
+        title_x=0.3,
         template="plotly_white",
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",

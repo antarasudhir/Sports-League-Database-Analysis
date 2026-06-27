@@ -416,7 +416,7 @@ elif viz == "Viz 1 — Injury Severity vs Win Rate":
     fig.update_layout(
         xaxis=dict(side="bottom"), 
         height=600,
-        title_x=0.5,
+        title_x=0.25,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0")

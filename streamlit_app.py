@@ -672,7 +672,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             hovertemplate="<b>%{y}</b><br>Position: %{customdata}<br>Avg Fee: $%{z:.2f}M<extra></extra>"
         )
         fig1.update_layout(
-            height=500, width=650,
+            height=450, width=650,
             title_x=0.5,
             xaxis=dict(tickangle=0),
             paper_bgcolor="#1A1F2E",
@@ -695,7 +695,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             hovertemplate="<b>%{y}</b><br>Position: %{customdata}<br>Injuries per Transfer: %{z:.2f}<extra></extra>"
         )
         fig2.update_layout(
-            height=500, width=650,
+            height=450, width=650,
             title_x=0.5,
             xaxis=dict(tickangle=0),
             paper_bgcolor="#1A1F2E",

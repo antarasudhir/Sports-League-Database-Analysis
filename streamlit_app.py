@@ -1,5 +1,4 @@
 import streamlit as st
-import sqlitecloud
 import sqlite3
 import pandas as pd
 import numpy as np
@@ -8,12 +7,15 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import warnings
+import requests
+import tempfile
+import os
 warnings.filterwarnings("ignore")
 
 # ─────────────────────────────────────────────
 # CONFIG
 # ─────────────────────────────────────────────
-CONN_STR = "sqlitecloud://cgllukzpvk.g1.sqlite.cloud:8860/team7_sportsleague.db?apikey=n2FaqEbp5bd9b9M1k5a9raf0kzV1ZALaepJqjMynwSA"
+DB_URL = "https://raw.githubusercontent.com/antarasudhir/Sports-League-Database-Analysis/main/assets/team7_sportsleague.db"
 
 st.set_page_config(
     page_title="Team 7 — Sports Analytics",
@@ -22,13 +24,28 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
+# DB LOADER
+# ─────────────────────────────────────────────
+
+@st.cache_resource
+def get_db_path():
+    """Download the .db file from GitHub and save to a temp file."""
+    r = requests.get(DB_URL)
+    r.raise_for_status()
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".db")
+    tmp.write(r.content)
+    tmp.close()
+    return tmp.name
+
+# ─────────────────────────────────────────────
 # SHARED HELPER FUNCTIONS
 # ─────────────────────────────────────────────
 
 @st.cache_data
 def extract(table_name):
-    """Connect to DB and load one raw table as a dataframe."""
-    conn = sqlitecloud.connect(CONN_STR)
+    """Load one raw table from the local temp DB copy."""
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
     conn.close()
     return df
@@ -167,7 +184,13 @@ def aggregate_stadium_profile(matches, stadiums, teams):
 
 @st.cache_data
 def aggregate_transfer_roi():
-    conn = sqlitecloud.connect(CONN_STR)
+    players   = transform(extract("players"))
+    transfers = transform(extract("transfers"))
+    injuries  = transform(extract("injuries"))
+    mem = sqlite3.connect(":memory:")
+    players.to_sql("players",     mem, index=False, if_exists="replace")
+    transfers.to_sql("transfers", mem, index=False, if_exists="replace")
+    injuries.to_sql("injuries",   mem, index=False, if_exists="replace")
     query = """
     SELECT
       p.position,
@@ -186,11 +209,9 @@ def aggregate_transfer_roi():
     HAVING AVG(t.fee) IS NOT NULL
     ORDER BY avg_transfer_fee DESC
     """
-    cursor = conn.execute(query)
-    columns = [desc[0] for desc in cursor.description]
-    rows = cursor.fetchall()
-    conn.close()
-    return pd.DataFrame(rows, columns=columns)
+    df = pd.read_sql(query, mem)
+    mem.close()
+    return df
 
 @st.cache_data
 def aggregate_payroll():
@@ -406,9 +427,9 @@ elif viz == "Viz 3 — Match Environment vs Home Advantage":
     st.markdown("*Attendance, surface, or attacking play — what creates home advantage?*")
 
     with st.spinner("Loading data..."):
-        matches     = transform(extract("matches"))
-        stadiums    = transform(extract("stadiums"))
-        teams       = transform(extract("teams"))
+        matches      = transform(extract("matches"))
+        stadiums     = transform(extract("stadiums"))
+        teams        = transform(extract("teams"))
         match_events = transform(extract("match_events"))
         df = aggregate_match_environment(matches, stadiums, teams, match_events)
 

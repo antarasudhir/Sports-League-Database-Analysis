@@ -643,10 +643,6 @@ elif viz == "Viz 5 — Transfer ROI by Position":
         values="injuries_per_transfer", aggfunc="mean"
     ).fillna(0)
 
-    # Abbreviate x-axis labels only
-    label_to_abbr = {v: k for k, v in position_labels.items()}
-    fee_pivot.columns = [label_to_abbr.get(c, c) for c in fee_pivot.columns]
-    injury_pivot.columns = [label_to_abbr.get(c, c) for c in injury_pivot.columns]
     
     col1, col2 = st.columns(2)
 

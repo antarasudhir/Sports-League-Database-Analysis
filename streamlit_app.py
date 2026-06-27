@@ -634,12 +634,12 @@ elif viz == "Viz 5 — Transfer ROI by Position":
     df["avg_transfer_fee_M"] = (df["avg_transfer_fee"] / 1_000_000).round(2)
 
     fee_pivot = df.pivot_table(
-        index="transfer_type", columns="position_label",
+        index="transfer_type", columns="position",
         values="avg_transfer_fee_M", aggfunc="mean"
     ).fillna(0)
 
     injury_pivot = df.pivot_table(
-        index="transfer_type", columns="position_label",
+        index="transfer_type", columns="position",
         values="injuries_per_transfer", aggfunc="mean"
     ).fillna(0)
 

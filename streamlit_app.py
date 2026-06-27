@@ -719,7 +719,7 @@ elif viz == "Viz 6 — Payroll vs Win %":
     ))
     fig.update_layout(
         height=500,
-        title_x=0.3,
+        title_x=0.4,
         paper_bgcolor="#1A1F2E",
         plot_bgcolor="#1A1F2E",
         font=dict(color="#E8ECF0"))

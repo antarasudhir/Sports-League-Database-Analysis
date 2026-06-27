@@ -634,15 +634,20 @@ elif viz == "Viz 5 — Transfer ROI by Position":
     df["avg_transfer_fee_M"] = (df["avg_transfer_fee"] / 1_000_000).round(2)
 
     fee_pivot = df.pivot_table(
-        index="transfer_type", columns="position",
+        index="transfer_type", columns="position_label",
         values="avg_transfer_fee_M", aggfunc="mean"
     ).fillna(0)
 
     injury_pivot = df.pivot_table(
-        index="transfer_type", columns="position",
+        index="transfer_type", columns="position_label",
         values="injuries_per_transfer", aggfunc="mean"
     ).fillna(0)
 
+    # Abbreviate x-axis labels only
+    label_to_abbr = {v: k for k, v in position_labels.items()}
+    fee_pivot.columns = [label_to_abbr.get(c, c) for c in fee_pivot.columns]
+    injury_pivot.columns = [label_to_abbr.get(c, c) for c in injury_pivot.columns]
+    
     col1, col2 = st.columns(2)
 
     with col1:

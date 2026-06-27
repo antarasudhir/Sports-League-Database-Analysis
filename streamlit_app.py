@@ -659,7 +659,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             height=450, 
             width=6500, 
             title_x=0.4,
-            xaxis=dict(tickangle=45),
+            xaxis=dict(tickangle=90),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",
             font=dict(color="#E8ECF0"))
@@ -679,7 +679,7 @@ elif viz == "Viz 5 — Transfer ROI by Position":
             height=450, 
             width=650, 
             title_x=0.4,
-            xaxis=dict(tickangle=45),
+            xaxis=dict(tickangle=90),
             paper_bgcolor="#1A1F2E",
             plot_bgcolor="#1A1F2E",
             font=dict(color="#E8ECF0"))
